@@ -1,4 +1,4 @@
-const formatNr = (x, separator = ',', unit = '', prefix = '', addComma = false, addPlus = false) => {
+const formatNr = (x, separator = ' ', unit = '', prefix = '', addComma = false, addPlus = false) => {
   let extra = '';
   if (addPlus === true && x > 0) {
     extra = '+';

@@ -28,7 +28,7 @@ Highcharts.setOptions({
   lang: {
     decimalPoint: '.',
     downloadCSV: 'Download CSV data',
-    thousandsSep: ','
+    thousandsSep: ' '
   }
 });
 Highcharts.SVGRenderer.prototype.symbols.download = (x, y, w, h) => {
@@ -60,9 +60,9 @@ Highcharts.SVGRenderer.prototype.symbols.download = (x, y, w, h) => {
   // eslint-disable-next-line
   H.Fx.prototype.textSetter = function () {
     try {
-      let startValue = this.start.replace(/,/g, '');
-      let endValue = this.end.replace(/,/g, '');
-      let currentValue = this.end.replace(/,/g, '');
+      let startValue = this.start.replace(/ /g, '');
+      let endValue = this.end.replace(/ /g, '');
+      let currentValue = this.end.replace(/ /g, '');
 
       if ((startValue || '').match(FLOAT)) {
         startValue = parseInt(startValue, 10);
@@ -172,8 +172,8 @@ function BarRaceChart({
     const line = d3.line()
       .x((d, i) => xScale(i))
       .y(d => yScale(d));
-    d3.select('.line_1').attr('d', line(tmp));
-  }, [data, xScale, yScale]);
+    d3.select(`.meta_data_${idx} .line_1`).attr('d', line(tmp));
+  }, [idx, data, xScale, yScale]);
 
   const pause = useCallback(() => {
     btn.current.innerHTML = '⏵︎';
@@ -182,7 +182,7 @@ function BarRaceChart({
   }, []);
 
   const updateChart = useCallback((year_idx) => {
-    document.querySelectorAll('.meta_data .values')[0].innerHTML = getSubtitle();
+    document.querySelectorAll(`.meta_data_${idx} .values`)[0].innerHTML = getSubtitle();
 
     chart.current.series[0].update({
       data: getData(year_idx)[1],
@@ -192,7 +192,7 @@ function BarRaceChart({
       text: `${title} in ${year_idx}?`
     });
     updateLineChart(year_idx);
-  }, [getData, getSubtitle, title, updateLineChart]);
+  }, [idx, getData, getSubtitle, title, updateLineChart]);
 
   const togglePlay = useCallback(() => {
     const update = (increment) => {
@@ -263,7 +263,7 @@ function BarRaceChart({
             chart_element.renderer.image('https://static.dwcdn.net/custom/themes/unctad-2024-rebrand/Blue%20arrow.svg', 15, 15, 44, 43.88).add();
           }
         },
-        marginRight: 60,
+        marginRight: 70,
         resetZoomButton: {
           theme: {
             fill: '#fff',
@@ -405,7 +405,7 @@ function BarRaceChart({
         },
         reserveSpace: true,
         labels: {
-          formatter: (el) => `<img src="${(window.location.href.includes('unctad.org')) ? 'https://storage.unctad.org/2024-merchant_fleet/' : (window.location.href.includes('localhost:80')) ? './' : 'https://unctad-infovis.github.io/2024-merchant_fleet/'}assets/img/flags/${countryCodes(el.value)}.png" class="flag" />`,
+          formatter: (el) => (idx === '01') && `<img src="${(window.location.href.includes('unctad.org')) ? 'https://storage.unctad.org/2024-merchant_fleet/' : (window.location.href.includes('localhost:80')) ? './' : 'https://unctad-infovis.github.io/2024-merchant_fleet/'}assets/img/flags/${countryCodes(el.value)}.png" class="flag" />`,
           distance: 10,
           padding: 0,
           rotation: 0,
@@ -485,8 +485,8 @@ function BarRaceChart({
       input.current = chartContainerRef.current.querySelector('.play_range');
       setTimeout(() => {
         createChart();
-        document.querySelectorAll('.meta_data .values')[0].innerHTML = getSubtitle();
-        const svg_container = d3.select('.line_chart')
+        document.querySelectorAll(`.meta_data_${idx} .values`)[0].innerHTML = getSubtitle();
+        const svg_container = d3.select(`.meta_data_${idx} .line_chart`)
           .append('svg');
 
         const line_container = svg_container.append('g')
@@ -498,7 +498,7 @@ function BarRaceChart({
           .data([]);
       }, 300);
     }
-  }, [createChart, getSubtitle, isVisible]);
+  }, [createChart, getSubtitle, idx, isVisible]);
 
   return (
     <div className="chart_container" style={{ minHeight: chart_height, maxWidth: '700px' }} ref={chartContainerRef}>
@@ -509,7 +509,7 @@ function BarRaceChart({
       <div ref={chartRef}>
         {(isVisible) && (<div className="chart" id={`chartIdx${idx}`} />)}
       </div>
-      <div className="meta_data">
+      <div className={`meta_data meta_data_${idx}`}>
         <div className="values" />
         <div className="line_chart" />
       </div>
