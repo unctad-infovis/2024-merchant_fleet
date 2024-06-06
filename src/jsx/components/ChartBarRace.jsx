@@ -131,7 +131,7 @@ function BarRaceChart({
   chart_height, data, idx, note, source, subtitle, title
 }) {
   const startYear = 1980;
-  const endYear = 2023;
+  const endYear = 2024;
   const nbr = 15;
   const chart = useRef();
   const chartRef = useRef();
