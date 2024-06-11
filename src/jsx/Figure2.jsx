@@ -16,7 +16,8 @@ function Figure1() {
     const values = Object.values(el).map(val => (val === '' ? 0 : roundNr(parseFloat(val), 0))).filter(val1 => !Number.isNaN(val1));
     return ({
       data: values.map((e) => ({
-        value: e
+        value: e,
+        color: (el.Name === 'Container ships') ? '#ff0' : '#009edb'
       })),
       name: el.Name
     });
@@ -49,9 +50,9 @@ function Figure1() {
         note=""
         show_only_first_and_last_labels={false}
         source="UNCTAD secretariat"
-        subtitle="Global fleet by type of ship, deadweight tonnage, 1000 dwt, annual, 1980–2024"
+        subtitle="Global fleet by type of ship, 1000 deadweight tonnage (dwt), annual, 1980–2024"
         suffix="%"
-        title="40 years of merchant fleets"
+        title="45 years of merchant fleets"
         ylabel=""
       />
       )}

@@ -73,7 +73,6 @@ Highcharts.SVGRenderer.prototype.symbols.download = (x, y, w, h) => {
       }
 
       this.elem.endText = this.end;
-
       this.elem.attr(this.prop, currentValue, null, true);
     } catch (error) {
       console.log(error);
@@ -149,7 +148,13 @@ function BarRaceChart({
       const countryData = country[1].data;
       return [countryName, countryData[year - startYear].value];
     }).sort((a, b) => b[1] - a[1]);
-    return [output[0], output.slice(1, nbr)];
+    let slice = output.slice(1, nbr);
+    slice = slice.map(el => ({
+      color: (el[0] === 'Container ships') ? '#fbaf17' : '#009edb',
+      name: el[0],
+      y: el[1]
+    }));
+    return [output[0], slice];
   }, [data]);
 
   const getSubtitle = useCallback(() => {
@@ -279,7 +284,7 @@ function BarRaceChart({
             },
             stroke: '#7c7067',
             style: {
-              fontFamily: 'Roboto',
+              fontFamily: 'Inter',
               fontSize: '13px',
               fontWeight: 400
             }
@@ -313,7 +318,6 @@ function BarRaceChart({
         bar: {
           animation: false,
           borderWidth: 0,
-          colorByPoint: true,
           cursor: 'default',
           dataSorting: {
             enabled: true,
@@ -465,7 +469,7 @@ function BarRaceChart({
           rotation: 0,
           style: {
             color: 'rgba(0, 0, 0, 0.8)',
-            fontFamily: 'Roboto',
+            fontFamily: 'Inter',
             fontSize: '16px',
             fontWeight: 400
           },
