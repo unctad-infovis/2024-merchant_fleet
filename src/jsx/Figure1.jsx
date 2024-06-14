@@ -48,7 +48,7 @@ function Figure1() {
         idx="01"
         note=""
         show_only_first_and_last_labels={false}
-        source="UNCTAD secretariat"
+        source="UNCTADstat"
         subtitle="Top 15 national fleets, 1000 deadweight tonnage (dwt), annual, 1980–2024"
         suffix="%"
         title="Who has the world’s largest fleet"

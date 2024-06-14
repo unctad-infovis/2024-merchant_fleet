@@ -20,6 +20,14 @@ import * as d3 from 'd3';
 import countryCodes from '../helpers/CountryCodes.js';
 import formatNr from '../helpers/FormatNr.js';
 
+const shipImage = {
+  'Bulk carriers': 'bulk.png',
+  'Container ships': 'container.png',
+  'General cargo': 'general.png',
+  'Oil tankers': 'oil.png',
+  'Other types of ships': 'other.png'
+};
+
 highchartsAccessibility(Highcharts);
 highchartsExporting(Highcharts);
 highchartsExportData(Highcharts);
@@ -194,7 +202,7 @@ function BarRaceChart({
       name: year_idx
     });
     chart.current.setTitle({
-      text: `${title} in ${year_idx}?`
+      text: title
     });
     updateLineChart(year_idx);
   }, [idx, getData, getSubtitle, title, updateLineChart]);
@@ -268,7 +276,7 @@ function BarRaceChart({
             chart_element.renderer.image('https://static.dwcdn.net/custom/themes/unctad-2024-rebrand/Blue%20arrow.svg', 15, 15, 44, 43.88).add();
           }
         },
-        marginRight: 70,
+        marginRight: 90,
         resetZoomButton: {
           theme: {
             fill: '#fff',
@@ -359,6 +367,11 @@ function BarRaceChart({
                 fontSize: '26px',
                 lineHeight: '30px'
               }
+            },
+            xAxis: {
+              labels: {
+                formatter: () => false
+              }
             }
           },
           condition: {
@@ -393,7 +406,7 @@ function BarRaceChart({
           fontWeight: 700,
           lineHeight: '26.4px',
         },
-        text: `${`${title} in ${input.current.value}`}?`,
+        text: title,
         widthAdjust: -144,
         x: 64,
         y: 20
@@ -409,7 +422,7 @@ function BarRaceChart({
         },
         reserveSpace: true,
         labels: {
-          formatter: (el) => (idx === '01') && `<img src="${(window.location.href.includes('unctad.org')) ? 'https://storage.unctad.org/2024-merchant_fleet/' : (window.location.href.includes('localhost:80')) ? './' : 'https://unctad-infovis.github.io/2024-merchant_fleet/'}assets/img/flags/${countryCodes(el.value)}.png" class="flag" />`,
+          formatter: (el) => ((idx === '01') ? `<img src="${(window.location.href.includes('unctad.org')) ? 'https://storage.unctad.org/2024-merchant_fleet/' : './'}assets/img/flags/${countryCodes(el.value)}.png" class="flag" />` : `<div class="ship_container"><img src="${(window.location.href.includes('unctad.org')) ? 'https://storage.unctad.org/2024-merchant_fleet/' : './'}assets/img/${shipImage[el.value]}" class="ship" /></div>`),
           distance: 10,
           padding: 0,
           rotation: 0,
@@ -481,7 +494,7 @@ function BarRaceChart({
     });
     chartRef.current.querySelector(`#chartIdx${idx}`).style.opacity = 1;
     setChartDone(true);
-  }, [chart_height, data, getData, input, idx, note, source, subtitle, title]);
+  }, [chart_height, data, getData, idx, note, source, subtitle, title]);
 
   useEffect(() => {
     if (isVisible === true) {
@@ -505,7 +518,7 @@ function BarRaceChart({
   }, [createChart, getSubtitle, idx, isVisible]);
 
   return (
-    <div className="chart_container" style={{ minHeight: chart_height, maxWidth: '700px' }} ref={chartContainerRef}>
+    <div className="chart_container" style={{ minHeight: chart_height }} ref={chartContainerRef}>
       <div className="play_controls">
         <button type="button" className="play_pause_button" aria-label="Play Pause" title="play" onClick={(event) => togglePlay(event)}>⏸︎</button>
         <input className="play_range" type="range" aria-label="Range" value={rangeValue} min={startYear} max={endYear} onInput={(event) => changeYear(event)} onChange={(event) => changeYear(event)} />
