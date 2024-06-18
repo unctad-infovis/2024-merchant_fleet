@@ -159,6 +159,7 @@ function BarRaceChart({
     let slice = output.slice(1, nbr);
     slice = slice.map(el => ({
       color: (el[0] === 'Container ships') ? '#fbaf17' : '#009edb',
+      // color: (el[0] === 'Container ships') ? '#009edb' : '#009edb',
       name: el[0],
       y: el[1]
     }));
